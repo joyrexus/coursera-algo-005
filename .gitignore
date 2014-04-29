@@ -1,0 +1,3 @@
+*.pdf
+*.py[cd]
+.DS_Store
