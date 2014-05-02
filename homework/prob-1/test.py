@@ -4,77 +4,104 @@ from sort import MergeSort
 
 sort = MergeSort()
 
-# Testing
-n = 1000
-input = range(n)
-random.shuffle(input)
+def test_sorting():
+    '''
+    Testing sort method.
+    
+    '''
+    assert sort([]) == []
+    assert sort([1]) == [1]
+    assert sort([0, 1]) == [0, 1]
+    assert sort([1, 0]) == [0, 1]
 
-assert sort(input) == range(n)
-assert 100 < sort.inversions < 1000
+    n = 1000
+    input = range(n)
+    random.shuffle(input)
+    assert sort(input) == range(n)
 
-assert sort([]) == []
-assert sort.inversions is 0
+def test_basic_inversions():
+    '''
+    Testing basic cases of inversion counting.
+    
+    '''
+    assert sort([]) == []
+    assert sort.inversions == 0, "for empty input"
 
-assert sort([1, 0]) == [0, 1]
-assert sort.inversions is 1
+    assert sort([1]) == [1]
+    assert sort.inversions == 0, "for odd-size input"
 
-'''
-# do I correctly initialize and handle empty input?
-Input: {}
-expected Output: 0
+    assert sort([1, 1]) == [1, 1]
+    assert sort.inversions == 0, "for identical elements"
 
-# do I correctly handle odd-sized input?
-I: {0}
-O: 0
+    assert sort([0, 1]) == [0, 1]
+    assert sort.inversions == 0, "for correctly ordered case"
 
-I: {4294967295} -- try using your max int value
-O: 0
+    assert sort([1, 0]) == [0, 1]
+    assert sort.inversions == 1, "for basic split-inversion case"
 
-# do I correclty handle even-size input?
-I: {0, 0}
-O: 0
+    assert sort([1, 0, 1]) == [0, 1, 1]
+    assert sort.inversions == 1, "for left inversion"
 
-# do I detect basic case of split inversion?
-I: {1, 0}
-O: 1
+    assert sort([0, 1, 0]) == [0, 0, 1]
+    assert sort.inversions == 1, "for right inversion"
 
-# do I actually count the split inversions?
-I: {1, 1, 0}
-O: 2
+    assert sort([1, 1, 0]) == [0, 1, 1]
+    assert sort.inversions == 2, "for multiple left inversions"
 
-# do I accumulate left-inversions?
-I: {1, 0, 1, 1}
-O: 1
+    assert sort([1, 0, 0]) == [0, 0, 1]
+    assert sort.inversions 
+    assert sort.inversions == 2, "for multiple right inversions"
 
-# do I accumulate right-inversions?
-I: {0, 0, 1, 0}
-O: 1
+    assert sort([1, 0, 1, 0]) == [0, 0, 1, 1]
+    assert sort.inversions == 3, \
+        "for split-inversions together with sub-problem results"
 
-# do I accumulate split-inversions together with sub-problem results?
-I: {1, 0, 1, 0}
-O: 3
+    assert sort([1, 0, 1, 1, 0]) == [0, 0, 1, 1, 1]
+    assert sort.inversions == 4, \
+        "for split-inversions together with sub-problem results"
 
-TEST CASE - 1
-A - {1,3,5,2,4,6} 
-ANS - 3
+    assert sort([2, 1, 0, 0]) == [0, 0, 1, 2]
+    assert sort.inversions == 5, "for multiple right inversions"
 
-TEST CASE - 2
-A- {1,5,3,2,4}
-ANS - 4
+    assert sort([4, 3, 2, 1]) == [1, 2, 3, 4]
+    assert sort.inversions == 6, "for multiple right inversions"
 
-TEST CASE - 3
-A- {5,4,3,2,1}  
-ANS - 10
+def test_inversions():
+    '''
+    Testing misc cases of inversion counting.
+    
+    '''
+    sort([1, 3, 5, 2, 4, 6]) 
+    assert sort.inversions == 3
 
-TEST CASE - 4 
-A - {1,6,3,2,4,5}
-ANS - 5
+    sort([1, 5, 3, 2, 4])
+    assert sort.inversions == 4
 
-Test Case - #1 - 15 numbers
-A - { 9, 12, 3, 1, 6, 8, 2, 5, 14, 13, 11, 7, 10, 4, 0 }
-Ans - 56
+    sort([5, 4, 3, 2, 1])  
+    assert sort.inversions == 10
 
-Test Case - #2 - 50 numbers
-A - { 37, 7, 2, 14, 35, 47, 10, 24, 44, 17, 34, 11, 16, 48, 1, 39, 6, 33, 43, 26, 40, 4, 28, 5, 38, 41, 42, 12, 13, 21, 29, 18, 3, 19, 0, 32, 46, 27, 31, 25, 15, 36, 20, 8, 9, 49, 22, 23, 30, 45 }
-Ans - 590
-'''
+    sort([1, 6, 3, 2, 4, 5])
+    assert sort.inversions == 5
+
+    input = [int(x) for x in '9 12 3 1 6 8 2 5 14 13 11 7 10 4 0'.split()]
+    sort(input)
+    assert sort.inversions == 56
+
+    input = [ 37, 7, 2, 14, 35, 47, 10, 24, 44, 17, 34, 11, 
+              16, 48, 1, 39, 6, 33, 43, 26, 40, 4, 28, 5, 
+              38, 41, 42, 12, 13, 21, 29, 18, 3, 19, 0, 32, 46, 
+              27, 31, 25, 15, 36, 20, 8, 9, 49, 22, 23, 30, 45 ]
+    sort(input)
+    assert sort.inversions == 590
+
+def test_homework():
+    '''
+    Testing inversion counting for input file (`input.txt`)
+    provided with homework assignment.
+
+    '''
+    input = [int(i.rstrip()) for i in open('input.txt')]
+    assert len(input) == 100000, 'for provided input'
+
+    sort(input)
+    assert sort.inversions == 2407905288, 'for our final answer'
