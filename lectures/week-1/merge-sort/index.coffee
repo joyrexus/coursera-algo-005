@@ -1,10 +1,10 @@
-
+# Divide an array into two sub-arrays
 split = (arr) ->
   n = arr.length - 1
   i = Math.round(n / 2)
   [arr[...i], arr[i..]]
 
-
+# Merge two sorted sub-arrays
 merge = (a, b) ->
   n = a.length + b.length
   i = j = 0
@@ -22,12 +22,14 @@ merge = (a, b) ->
       return result.concat(a[i..])
   result
   
+# Numerically sort an array
 sort = (arr) ->
     return arr if arr.length < 2
     [a, b] = split(arr)
     merge(sort(a), sort(b))
 
 
+# Testing
 assert = require 'assert'
 
 input = [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]

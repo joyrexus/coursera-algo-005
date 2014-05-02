@@ -1,14 +1,23 @@
 import random
 
+
 def split(arr):
+    '''
+    Divide an array into two sub-arrays.
+
+    '''
     n = len(arr)
     i = n / 2
     a, b = arr[:i], arr[i:]
     return a, b
 
+
 def _merge(a, b, result=[]):
     '''
-    Recursive version.
+    Merge two sorted subarrays.
+
+    This is a recursive variant of `merge`.  
+    Problematic/inefficient on large input.
 
     '''
     if not a:
@@ -22,6 +31,10 @@ def _merge(a, b, result=[]):
   
 
 def merge(a, b):
+    '''
+    Merge two sorted sub-arrays.
+
+    '''
     i = j = 0
     result = []
     for k in range(len(a) + len(b)):
@@ -39,12 +52,18 @@ def merge(a, b):
             break
     return result
 
+
 def sort(arr):
+    '''
+    Numerically sort an array.
+
+    '''
     if len(arr) < 2: return arr
     a, b = split(arr)
     return merge(sort(a), sort(b))
 
 
+# Testing
 n = 1000
 input = range(n)
 random.shuffle(input)

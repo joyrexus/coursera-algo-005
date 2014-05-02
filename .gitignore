@@ -1,3 +1,4 @@
 *.pdf
+*.url
 *.py[cd]
 .DS_Store
