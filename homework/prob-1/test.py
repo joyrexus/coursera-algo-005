@@ -80,6 +80,11 @@ def test_inversions():
     sort([5, 4, 3, 2, 1])  
     assert sort.inversions == 10
 
+    n = 10
+    input = range(10, 0, -1)    # [10, 9, ..., 1]
+    sort(input)
+    assert sort.inversions == (n * (n - 1)) / 2, "should be n choose 2"
+
     sort([1, 6, 3, 2, 4, 5])
     assert sort.inversions == 5
 
