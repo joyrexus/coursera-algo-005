@@ -31,13 +31,13 @@ from random import randint
 #   [   |  < p  | p |  > p  |   ] 
 #       l         i         j
 #
-def partition(arr, i, l, r, count):
+def partition(arr, l, r, i, count=None):
     assert l <= i <= r
     p = arr[i]                              # value of pivot element
     arr[l], arr[i] = arr[i], arr[l]         # swap pivot w/ leftmost elemnt
     i = l + 1                               # elements before index i should be < p
     for j in range(i, r + 1):
-        count(1)
+        if count: count(1)
         if arr[j] < p:
             arr[i], arr[j] = arr[j], arr[i] # swap!
             i += 1                               
@@ -50,7 +50,7 @@ def quicksort(arr, l=0, r=None, count=None, pivot=randint):
     if r is None: r = len(arr) - 1
     if l >= r: return
     i = pivot(l, r)
-    i = partition(arr, i, l, r, count)
+    i = partition(arr, l, r, i, count)
     quicksort(arr, l, i - 1, count, pivot)
     quicksort(arr, i + 1, r, count, pivot)
 
@@ -69,16 +69,6 @@ if __name__ == '__main__':
     first = lambda l, r: l
     last  = lambda l, r: r
     arr = [2, 5, 4, 3, 0, 9, 8, 6, 1, 20, 17]
-
-    for pivot in [first, last]:
-        input = arr[:]
-        count = Counter()
-        quicksort(input, count=count, pivot=pivot)
-        print count.total
-
-    input = [3, 9, 8, 4, 6, 10, 2, 5, 7, 1]
-    count = Counter()
-    quicksort(input, count=count, pivot=first)
 
     input = [x.rstrip() for x in open('100.txt')]
     arr = input[:]
