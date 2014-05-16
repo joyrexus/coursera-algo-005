@@ -32,8 +32,8 @@ from random import randint
 #       l             i         j
 #       arr[l:i]    arr[i]  arr[i+1:r+1]
 #
-def partition(arr, l, r, i, count=None):
-    assert l <= i <= r
+def partition(arr, l, r, i, count=None, asserting=False):
+    if asserting: assert l <= i <= r
     p = arr[i]                              # value of pivot element
     arr[l], arr[i] = arr[i], arr[l]         # swap pivot w/ leftmost element
     i = l + 1                               # start i after leftmost element
@@ -44,8 +44,8 @@ def partition(arr, l, r, i, count=None):
             i += 1                               
     i -= 1
     arr[l], arr[i] = arr[i], arr[l]         # swap pivot w/ LAST > p element
-    assert all(x < p for x in arr[l:i])
-    assert all(x >= p for x in arr[i+1:r])
+    if asserting: assert all(x < p for x in arr[l:i])
+    if asserting: assert all(x >= p for x in arr[i+1:r])
     return i
 
 
