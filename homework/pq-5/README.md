@@ -2,7 +2,15 @@
 
 In this programming problem you'll code up Dijkstra's shortest-path algorithm. 
 
-The `data.txt` file contains an adjacency list representation of an undirected weighted graph with 200 vertices labeled 1 to 200. Each row consists of the node tuples that are adjacent to that particular vertex along with the length of that edge. For example, the 6th row has 6 as the first entry indicating that this row corresponds to the vertex labeled 6. The next entry of this row "141,8200" indicates that there is an edge between vertex 6 and vertex 141 that has length 8200. The rest of the pairs of this row indicate the other vertices adjacent to vertex 6 and the lengths of the corresponding edges.
+The `data.txt` file contains an adjacency list representation of an undirected weighted graph with 200 vertices labeled 1 to 200. Each row consists of the node tuples that are adjacent to that particular vertex along with the length of that edge. 
+
+Sample Row:
+
+```
+6	141,8200	98,5594	66,6627	159,9500	143,3110	129,8525	118,8547	88,2039	83,4949	165,6473	162,6897	184,8021	123,13	176,3512	195,2233	42,7265	47,274	132,1514	2,8847	171,3722	3,9006	
+```
+
+For example, the 6th row has 6 as the first entry indicating that this row corresponds to the vertex labeled 6. The next entry of this row `141,8200` indicates that there is an edge between vertex 6 and vertex 141 that has length 8200. The rest of the pairs of this row indicate the other vertices adjacent to vertex 6 and the lengths of the corresponding edges.
 
 Your task is to run Dijkstra's shortest-path algorithm on this graph, using 1 (the first vertex) as the source vertex, and to compute the shortest-path distances between 1 and every other vertex of the graph. If there is no path between a vertex v and vertex 1, we'll define the shortest-path distance between 1 and v to be 1000000. 
 
@@ -12,6 +20,13 @@ You should report the shortest-path distances to the following ten vertices, in 
 ## Implementation Notes
 
 This graph is small enough that the straightforward *O(mn)* time implementation of Dijkstra's algorithm should work fine. 
+
+We'll use [our priority queue implementation](https://github.com/joyrexus/sandbox/tree/master/heaps) for min search.
+
+Example python implementations:
+
+* [Ex 1](https://github.com/kqdtran/ADA1/tree/master/dijkstra)
+* [Ex 2](http://code.activestate.com/recipes/119466-dijkstras-algorithm-for-shortest-paths/)
 
 
 ## Optional
