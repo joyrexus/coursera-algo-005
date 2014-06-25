@@ -31,8 +31,6 @@ class Edge:
         return ': '.join([self.label, self.length])
 
 
-
-
 def make_graph(filename):
     '''
     Construct a graph representation from a file containing an adjacency list 
@@ -79,7 +77,6 @@ def make_graph(filename):
     return G
 
 
-
 def djikstra(G, start):
     '''
     Djikstra's algorithm determines the length from `start` to 
@@ -88,21 +85,29 @@ def djikstra(G, start):
     '''
     D = {start: 0}          # track shortest path distances from `start`
     E = set([start])        # explored
-    F = set(G.keys()) - E   # frontier
+    U = set(G.keys()) - E   # unexplored
+    X = []                  # crossing edges
 
     
-    while F:
-        for v in E:
-            for w in G[v]:
-                if w in F:
-                    d = D[v] + G[v][w]
+    # while U:              # while there are unexplored nodes
+
+    for v in E:             # identify crossing edges
+        for w in G[v]:
+            min = float('inf')
+            if w in U:
+                d = D[v] + G[v][w]
+                if d < min:
+                    D[w] = d
+
+
+    print D
     
+    '''
     for w in G[v]:
         d = D[v] + G[v][w]
         if w not in D or d < D[w]:
             D[w] = d
 
-    '''
     while v in F:
         F.add(v)
     '''
@@ -110,13 +115,10 @@ def djikstra(G, start):
     return D
 
 
+G = make_graph('test-sample.txt')
+assert G['A']['C'] == 5
 
-G = make_graph('sample.txt')
-assert G['6']['141'] == 8200
-
-djikstra(G, '1')
-
-
+djikstra(G, 'A')
 
 raise SystemExit()
 
