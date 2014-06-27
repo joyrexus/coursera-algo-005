@@ -1,36 +1,3 @@
-from collections import defaultdict
-
-
-class Vertex:
-    '''
-    A Vertex consists of a label and an array of Edges.
-
-    '''
-    def __init__(self, vertex, edges):
-        self.label = label
-        self.edges = edges
-
-    def __repr__(self):
-        return ': '.join([self.label, self.edges.__repr__()])
-
-
-class Edge:
-    '''
-    An Edge is a property of a Vertex.
-    
-    An Edge consists of an edge between the Vertex 
-    and another vertex (specified by `label`) as well 
-    the `length` of that edge.
-
-    '''
-    def __init__(self, label, length):
-        self.label = label
-        self.length = length
-
-    def __repr__(self):
-        return ': '.join([self.label, self.length])
-
-
 def make_graph(filename):
     '''
     Construct a graph representation from a file containing an adjacency list 
@@ -76,20 +43,6 @@ def make_graph(filename):
 
     return G
 
-def frontier(G, E, U):
-    '''
-    Return list of all x where x is a node in U
-    and the head of a link from a node in E.
-
-    '''
-    F = []
-    for u in U:
-        for p in priors[u]:
-            if p in E:
-                F.append(p)
-    return F
-
-
 
 def djikstra(G, start):
     '''
@@ -97,25 +50,25 @@ def djikstra(G, start):
     every other vertex in the graph.
 
     '''
+    inf = float('inf')
     dist = {start: 0}       # track shortest path distances from `start`
     E = set([start])        # explored
     U = set(G.keys()) - E   # unexplored
 
-    
-    while U:                # while there are unexplored nodes
-        D = {}
-        for x in frontier(G, E, U):
-            p = min_prior(x)
-            D[x] = dist(p) + G[p][x]
+    while U:                                        # unexplored nodes
+        D = {}                                      # frontier candidates
+        for u in U:                                 # unexplored nodes
+            for v in G[u].keys():                   # neighbors of u
+                if v in E:                          # then u is a frontier node
+                    l = dist[v] + G[u][v]           # start -> v -> u
+                    D[u] = min(l, D.get(u, inf))    # choose minimum for u
 
-        n = min(D, key=D.get)
-        U.remove(n)
-        dist(n) = D(n)
-    
-    return D
+        x = min(D, key=D.get)                       # node w/ min dist on frontier
+        dist[x] = D[x]                              # djikstra greedy score
+        U.remove(x)                                 # remove from unexplored
+        E.add(x)                                    # add to explored
 
-
-def distance_to(x): return 1000
+    return dist
 
 
 def answer():
@@ -128,20 +81,15 @@ def answer():
 
     '''
     G = make_graph('data.txt')
+    dist = djikstra(G, '1')
 
     ends  = [7, 37, 59, 82, 99, 115, 133, 165, 188, 197] # ending vertices
-    results = [str(distance_to(x)) for x in ends]
+    results = [str(dist[str(x)]) for x in ends]
     return ','.join(results)
-
 
 
 if __name__ == '__main__':
 
-    G = make_graph('test-sample.txt')
-    assert G['A']['C'] == 5
-
-    print djikstra(G, 'A')
-
-    # print answer()
-
-
+    result = answer()
+    expected = '2599,2610,2947,2052,2367,2399,2029,2442,2505,3068'
+    assert result == expected
