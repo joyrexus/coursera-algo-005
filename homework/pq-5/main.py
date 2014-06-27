@@ -76,6 +76,20 @@ def make_graph(filename):
 
     return G
 
+def frontier(G, E, U):
+    '''
+    Return list of all x where x is a node in U
+    and the head of a link from a node in E.
+
+    '''
+    F = []
+    for u in U:
+        for p in priors[u]:
+            if p in E:
+                F.append(p)
+    return F
+
+
 
 def djikstra(G, start):
     '''
@@ -83,44 +97,23 @@ def djikstra(G, start):
     every other vertex in the graph.
 
     '''
-    D = {start: 0}          # track shortest path distances from `start`
+    dist = {start: 0}       # track shortest path distances from `start`
     E = set([start])        # explored
     U = set(G.keys()) - E   # unexplored
-    X = []                  # crossing edges
 
     
-    # while U:              # while there are unexplored nodes
+    while U:                # while there are unexplored nodes
+        D = {}
+        for x in frontier(G, E, U):
+            p = min_prior(x)
+            D[x] = dist(p) + G[p][x]
 
-    for v in E:             # identify crossing edges
-        for w in G[v]:
-            min = float('inf')
-            if w in U:
-                d = D[v] + G[v][w]
-                if d < min:
-                    D[w] = d
-
-
-    print D
+        n = min(D, key=D.get)
+        U.remove(n)
+        dist(n) = D(n)
     
-    '''
-    for w in G[v]:
-        d = D[v] + G[v][w]
-        if w not in D or d < D[w]:
-            D[w] = d
-
-    while v in F:
-        F.add(v)
-    '''
-
     return D
 
-
-G = make_graph('test-sample.txt')
-assert G['A']['C'] == 5
-
-djikstra(G, 'A')
-
-raise SystemExit()
 
 def distance_to(x): return 1000
 
@@ -144,6 +137,11 @@ def answer():
 
 if __name__ == '__main__':
 
-    print answer()
+    G = make_graph('test-sample.txt')
+    assert G['A']['C'] == 5
+
+    print djikstra(G, 'A')
+
+    # print answer()
 
 
