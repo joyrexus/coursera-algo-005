@@ -1,5 +1,5 @@
 from nose.tools import assert_raises
-from main import make_graph, djikstra
+from main-pq import make_graph, djikstra
 
 
 def test_make_graph():

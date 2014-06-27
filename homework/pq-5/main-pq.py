@@ -4,20 +4,22 @@ from pqdict import PQDict
 def make_graph(filename):
     '''
     Construct a graph representation from a file containing an adjacency list 
-    representation of an undirected weighted graph.
+    representation of a weighted graph. 
     
-    Each row is assumed to consist of a vertex label and its respective neighbors 
-    (i.e., the vertices that are adjacent to that particular vertex).
+    Each row is assumed to consist of a node label and the labels of the
+    given node's direct predecessors (i.e., the tail nodes from which the 
+    specified head node is directly accessible.)
     
-    Each neighbor is represented as a tuple `(w, length)`, where length is the
-    length from `v` to `w`.
+    Each predecessor node is represented as a tuple `(w, length)`, where 
+    length is the length from `w` to `v`.
 
-        v : [neighbors]
+        v : [direct predecessors]
         v : (w, length) (x, length) ...
 
-    Note that in the file containing the adjacency lists, `v` and each of its 
-    neighbors are separated by tabs.  Neighbor tuples are separated by a comma. 
-    So, each row has the following format:
+    Note that in the file containing the adjacency lists, the head node `v` 
+    and each of its predecessor tuples are assumed to be separated by tabs.  
+    The predecessor tuples should be comma-separated.  So, each row should
+    have the following format:
 
         v\tw,length\tx,length\t...
 
@@ -25,10 +27,11 @@ def make_graph(filename):
 
         6\t141,8200\t98,5594\t66,6627\t...
 
-    The returned graph `G` is a dictionary indexed by vertices.  The value of each 
-    item `G[v]` is also a dictionary indexed by neighbor vertices.  In other words, 
-    for any vertex `v`, `G[v]` is itself a dictionary, indexed by the neighbors of 
-    `v`.  For any edge `v -> w`, `G[v][w]` is the length of the edge. 
+    The returned graph `G` is a dict indexed by node label.  The value of 
+    each item `G[v]` is also a dict indexed by v's predecessor nodes.  In 
+    other words, for any vertex `v`, `G[v]` is itself a dict, indexed by 
+    the predecessors of `v`.  For any edge `w -> v`, `G[v][w]` is the length 
+    of the edge from `w` to `v`.
 
         >>> G = make_graph('sample.txt')
         >>> G['6']['141']
@@ -52,11 +55,11 @@ def djikstra(G, start):
     Djikstra's algorithm determines the length from `start` to every other 
     vertex in the graph.
 
-    The graph argument `G` should be a dict indexed by vertices.  The value 
-    of each item `G[v]` should also a dictionary indexed by neighbor 
-    vertices.  In other words, for any vertex `v`, `G[v]` is itself a 
-    dict, indexed by the neighbors of `v`.  For any edge `v -> w`, 
-    `G[v][w]` is the length of the edge. 
+    The graph argument `G` should be a dict indexed by nodes.  The value 
+    of each item `G[v]` should also a dict indexed by predecessor nodes.
+    In other words, for any node `v`, `G[v]` is itself a dict, indexed 
+    by the predecessors of `v`.  For any directed edge `w -> v`, `G[v][w]` 
+    is the length of the edge from `w` to `v`.
 
     '''
     inf = float('inf')
