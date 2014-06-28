@@ -1,6 +1,39 @@
 from pqdict import PQDict
 
 
+def djikstra(G, start):
+    '''
+    Djikstra's algorithm determines the length from `start` to every other 
+    vertex in the graph.
+
+    The graph argument `G` should be a dict indexed by nodes.  The value 
+    of each item `G[v]` should also a dict indexed by predecessor nodes.
+    In other words, for any node `v`, `G[v]` is itself a dict, indexed 
+    by the predecessors of `v`.  For any directed edge `w -> v`, `G[v][w]` 
+    is the length of the edge from `w` to `v`.
+
+    '''
+    inf = float('inf')
+    dist = {start: 0}       # track shortest path distances from `start`
+    E = set([start])        # explored
+    U = set(G.keys()) - E   # unexplored
+
+    while U:                                        # unexplored nodes
+        D = PQDict()                                # frontier candidates
+        for u in U:                                 # unexplored nodes
+            for v in G[u]:                          # neighbors of u
+                if v in E:                          # then u is a frontier node
+                    l = dist[v] + G[u][v]           # start -> v -> u
+                    D[u] = min(l, D.get(u, inf))    # choose minimum for u
+
+        (x, d) = D.popitem()                        # node w/ min dist on frontier
+        dist[x] = d                                 # assign djikstra greedy score
+        U.remove(x)                                 # remove from unexplored
+        E.add(x)                                    # add to explored
+
+    return dist                                     # shortest path distances
+                                                    # from start
+
 def make_graph(filename):
     '''
     Construct a graph representation from a file containing an adjacency list 
@@ -48,40 +81,6 @@ def make_graph(filename):
             G[label] = neighbors
 
     return G
-
-
-def djikstra(G, start):
-    '''
-    Djikstra's algorithm determines the length from `start` to every other 
-    vertex in the graph.
-
-    The graph argument `G` should be a dict indexed by nodes.  The value 
-    of each item `G[v]` should also a dict indexed by predecessor nodes.
-    In other words, for any node `v`, `G[v]` is itself a dict, indexed 
-    by the predecessors of `v`.  For any directed edge `w -> v`, `G[v][w]` 
-    is the length of the edge from `w` to `v`.
-
-    '''
-    inf = float('inf')
-    dist = {start: 0}       # track shortest path distances from `start`
-    E = set([start])        # explored
-    U = set(G.keys()) - E   # unexplored
-
-    while U:                                        # unexplored nodes
-        D = PQDict()                                # frontier candidates
-        for u in U:                                 # unexplored nodes
-            for v in G[u]:                          # neighbors of u
-                if v in E:                          # then u is a frontier node
-                    l = dist[v] + G[u][v]           # start -> v -> u
-                    D[u] = min(l, D.get(u, inf))    # choose minimum for u
-
-        (x, d) = D.popitem()                        # node w/ min dist on frontier
-        dist[x] = d                                 # assign djikstra greedy score
-        U.remove(x)                                 # remove from unexplored
-        E.add(x)                                    # add to explored
-
-    return dist                                     # shortest path distances
-                                                    # from start
 
 
 def answer():
